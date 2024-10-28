@@ -2,14 +2,19 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import { dynamodb } from "../db";
+import { signinSchema } from "../schema";
 
 const jwtSecretKey = process.env.JWT_SECRET_KEY || "myjwtsecret";
 
 const userSigninController = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ error: "Email and password are required" });
+  const {success} = signinSchema.safeParse(req.body)
+
+  if (!success) {
+    return res.status(400).json({
+      message: "Invalid request data",
+    });
   }
 
   try {
