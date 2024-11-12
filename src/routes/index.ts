@@ -1,10 +1,12 @@
 import express from "express";
 import { userRouter } from "./userRoutes";
-import { userDetailsRouter } from "./userDetailsRoutes";
+import { questionRouter } from "./questionRoutes";
+import { marksRouter } from "./marksRoutes";
 
 const router = express.Router();
 
 router.use("/user", userRouter);
-router.use("/account", userDetailsRouter);
+router.use("/questions", questionRouter);
+router.use("/marks", marksRouter);
 
 export default router;

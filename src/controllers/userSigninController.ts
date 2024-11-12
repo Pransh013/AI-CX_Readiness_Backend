@@ -9,7 +9,7 @@ const jwtSecretKey = process.env.JWT_SECRET_KEY || "myjwtsecret";
 const userSigninController = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  const {success} = signinSchema.safeParse(req.body)
+  const { success } = signinSchema.safeParse(req.body);
 
   if (!success) {
     return res.status(400).json({
@@ -39,7 +39,15 @@ const userSigninController = async (req: Request, res: Response) => {
 
       const token = jwt.sign({ userId: user.userId }, jwtSecretKey);
 
-      return res.status(200).json({ message: "Login successful", token });
+      return res.status(200).json({
+        message: "Login successful",
+        token,
+        user: {
+          userId: user.userId,
+          fullName: user.fullName,
+          role: user.role,
+        },
+      });
     } else {
       return res.status(401).json({ error: "Invalid email" });
     }
