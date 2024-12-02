@@ -30,3 +30,15 @@ export const signinSchema = z.object({
     .string()
     .min(6, { message: "Password must be atleast 6 characters long" }),
 });
+
+export type EmailInvitationParams = {
+  email: string;
+  temporaryPassword: string;
+  resetPasswordUrl: string;
+};
+
+export type DelegateEmployeesRequestBody = {
+  managerId: string; 
+  invitedEmails: string[];
+  companyName: string;
+};

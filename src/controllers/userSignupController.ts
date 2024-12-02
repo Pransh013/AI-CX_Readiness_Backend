@@ -47,23 +47,22 @@ const userSignupController = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const userId = uuidv4();
-    
+
     if (!existingCompany.Items || existingCompany.Items.length === 0) {
       const companyParams = {
         TableName: "aicx_companies",
         Item: {
-          companyId : uuidv4(), 
+          companyId: uuidv4(),
           companyName,
           userIds: [userId],
         },
       };
       await dynamodb.put(companyParams).promise();
-      
     } else {
       const company = existingCompany.Items[0];
       const companyId = company.companyId;
       company.userIds.push(userId);
-      
+
       const updateCompanyParams = {
         TableName: "aicx_companies",
         Key: {
@@ -85,7 +84,10 @@ const userSignupController = async (req: Request, res: Response) => {
         password: hashedPassword,
         fullName,
         role,
+        teamRole: role,
         companyName,
+        invitations: [],
+        managerId: null,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       },
@@ -100,6 +102,7 @@ const userSignupController = async (req: Request, res: Response) => {
       user: {
         userId,
         fullName,
+        teamRole: role,
         role,
       },
     });

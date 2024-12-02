@@ -29,28 +29,31 @@ const userSigninController = async (req: Request, res: Response) => {
 
     const result = await dynamodb.query(params).promise();
 
-    if (result.Items && result.Items.length > 0) {
-      const user = result.Items[0];
-
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        return res.status(401).json({ error: "Invalid password" });
-      }
-
-      const token = jwt.sign({ userId: user.userId }, jwtSecretKey);
-
-      return res.status(200).json({
-        message: "Login successful",
-        token,
-        user: {
-          userId: user.userId,
-          fullName: user.fullName,
-          role: user.role,
-        },
-      });
-    } else {
-      return res.status(401).json({ error: "Invalid email" });
+    if (!result.Items || result.Items.length === 0) {
+      return res.status(401).json({ error: "Invalid email or password" });
     }
+
+    const user = result.Items[0];
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: "Invalid password" });
+    }
+
+    const token = jwt.sign({ userId: user.userId }, jwtSecretKey);
+
+    console.log(user);
+    return res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        userId: user.userId,
+        fullName: user.fullName,
+        role: user.role,
+        teamRole: user.teamRole
+      },
+    });
+    
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).json({ error: "Internal server error" });

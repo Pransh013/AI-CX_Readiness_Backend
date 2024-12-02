@@ -3,7 +3,7 @@ import { dynamodb } from "../db";
 
 export const getAIQuestionsController = async (req: Request, res: Response) => {
   const { role } = req.params;
-
+  
   try {
     const params = {
       TableName: "ai_questions",
