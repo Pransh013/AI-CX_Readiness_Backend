@@ -48,6 +48,7 @@ const userSigninController = async (req: Request, res: Response) => {
       token,
       user: {
         userId: user.userId,
+        email: user.email,
         fullName: user.fullName,
         role: user.role,
         teamRole: user.teamRole

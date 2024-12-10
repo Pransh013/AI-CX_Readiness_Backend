@@ -21,7 +21,8 @@ const delegateEmployeesController = async (req: Request, res: Response) => {
     if (!manager.Item) {
       return res.status(404).json({ error: "Manager not found" });
     }
-
+    console.log("manager", manager);
+    
     const managerRole = manager.Item.role;
     if (["employee"].includes(managerRole)) {
       return res
@@ -41,7 +42,7 @@ const delegateEmployeesController = async (req: Request, res: Response) => {
     };
 
     await dynamodb.update(updateManagerParams).promise();
-
+    
     for (const email of invitedEmails) {
       const temporaryPassword = generateSecurePassword(); 
       const hashedPassword = await bcrypt.hash(temporaryPassword, 10);
@@ -56,7 +57,7 @@ const delegateEmployeesController = async (req: Request, res: Response) => {
           role: "employee",
           teamRole: managerRole,
           companyName: manager.Item.companyName,
-          invitations: null,
+          invited_members: null,
           managerId,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
@@ -65,7 +66,6 @@ const delegateEmployeesController = async (req: Request, res: Response) => {
 
       await dynamodb.put(employeeParams).promise();
 
-      // Generate a password reset token and URL (store token in a database for validation if needed)
       const resetPasswordToken = uuidv4(); // Secure token
       const resetPasswordUrl = `https://yourapp.com/reset-password?email=${email}&token=${resetPasswordToken}`;
 

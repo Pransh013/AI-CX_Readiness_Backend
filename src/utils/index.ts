@@ -40,5 +40,18 @@ export const sendEmailInvitation = async ({
 };
 
 export const generateSecurePassword = () => {
-  return crypto.randomBytes(8).toString("hex"); // Generates a random 16-character password
+  return crypto.randomBytes(4).toString("hex"); // Generates a random 16-character password
+};
+
+export const formatDate = (isoDate: string): string => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  };
+  return new Date(isoDate).toLocaleString("en-US", options);
 };

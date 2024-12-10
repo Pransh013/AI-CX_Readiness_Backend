@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid"; // UUID for generating unique ids
+import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
@@ -86,7 +86,7 @@ const userSignupController = async (req: Request, res: Response) => {
         role,
         teamRole: role,
         companyName,
-        invitations: [],
+        invited_members: [],
         managerId: null,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -101,6 +101,7 @@ const userSignupController = async (req: Request, res: Response) => {
       token,
       user: {
         userId,
+        email,
         fullName,
         teamRole: role,
         role,

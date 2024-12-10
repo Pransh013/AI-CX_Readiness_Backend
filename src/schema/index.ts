@@ -40,5 +40,4 @@ export type EmailInvitationParams = {
 export type DelegateEmployeesRequestBody = {
   managerId: string; 
   invitedEmails: string[];
-  companyName: string;
 };
